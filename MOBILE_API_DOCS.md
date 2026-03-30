@@ -201,3 +201,55 @@ All Notifications endpoints require the `Authorization: Bearer <token>` header.
     }
     ```
 - **Response (200 OK)**: `{ "success": true }`
+
+---
+
+## 👤 5. Profile API
+
+Manage the currently authenticated user's profile settings.
+
+### Get Profile
+**GET** `/api/profile`
+- **Response (200 OK)**
+  ```json
+  {
+    "_id": "60d5ec...",
+    "name": "Jane Doe",
+    "email": "jane@example.com",
+    "createdAt": "..."
+  }
+  ```
+
+### Update Profile
+**PUT** `/api/profile`
+- **Body** (JSON - provide only fields you wish to update):
+  ```json
+  {
+    "name": "Jane Developer",
+    "password": "newpassword123"
+  }
+  ```
+- **Response (200 OK)**: Returns the updated Profile object.
+
+---
+
+## 📱 6. Device Token API (Push Notifications)
+
+Register the device for Firebase Cloud Messaging (FCM) or Apple Push Notifications (APNs).
+
+### Save Device Token
+**POST** `/api/mobile/device-token`
+- **Description**: Send the mobile device token here. The backend Cron Job will trigger real push notifications 3 hours and 10 minutes before a Todo deadline using this token identity.
+- **Body** (JSON):
+  ```json
+  {
+    "deviceToken": "dpX9_..."
+  }
+  ```
+- **Response (200 OK)**
+  ```json
+  {
+    "success": true,
+    "message": "Device token saved successfully"
+  }
+  ```
