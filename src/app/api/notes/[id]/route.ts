@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import Note from "@/models/Note";
-import { getCurrentUser } from "@/lib/session";
+import { getHybridUser } from "@/lib/session";
 import { noteSchema } from "@/lib/validations";
 
 export async function PUT(req: Request, context: { params: Promise<{ id: string }> }) {
   try {
-    const user = await getCurrentUser();
+    const user = await getHybridUser(req);
     if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
     const params = await context.params;
@@ -33,7 +33,7 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
 
 export async function DELETE(req: Request, context: { params: Promise<{ id: string }> }) {
   try {
-    const user = await getCurrentUser();
+    const user = await getHybridUser(req);
     if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
     const params = await context.params;

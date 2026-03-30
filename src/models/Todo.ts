@@ -6,6 +6,8 @@ export interface ITodo extends Document {
   description?: string;
   status: 'pending' | 'completed';
   deadline?: Date;
+  notified3h: boolean;
+  notified10m: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -17,6 +19,8 @@ const TodoSchema: Schema = new Schema(
     description: { type: String },
     status: { type: String, enum: ['pending', 'completed'], default: 'pending' },
     deadline: { type: Date },
+    notified3h: { type: Boolean, default: false },
+    notified10m: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
