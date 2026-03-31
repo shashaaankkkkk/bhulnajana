@@ -61,21 +61,23 @@ Get your Bearer Token by creating an account or logging in.
 
 ---
 
-## ✅ 2. Todos API
+## ✅ 2. Todos & Focus API
 
-All Todo endpoints require the `Authorization: Bearer <token>` header.
+All Todo endpoints require the `Authorization: Bearer <token>` header. The system now supports high-fidelity architectural goal tracking.
 
 ### Get All Todos
 **GET** `/api/todos`
-- **Description**: Fetches all todos for the authenticated user, sorted by creation date (newest first).
+- **Description**: Fetches all todos for the authenticated user, sorted by newest first.
 - **Response (200 OK)**
   ```json
   [
     {
       "_id": "abc1234",
-      "title": "Buy groceries",
-      "description": "Milk, Eggs, Bread",
+      "title": "Build Binary Tree traversal",
+      "description": "Implement DFS and BFS benchmarks",
       "status": "pending",
+      "category": "dsa",  // 'task' | 'dsa'
+      "problemLink": "https://leetcode.com/problems/...", // Optional for 'dsa'
       "deadline": "2026-04-01T10:00:00.000Z",
       "userId": "60d5ec...",
       "createdAt": "...",
@@ -89,10 +91,12 @@ All Todo endpoints require the `Authorization: Bearer <token>` header.
 - **Body** (JSON):
   ```json
   {
-    "title": "New Task",
-    "description": "Optional details",
+    "title": "New Goal",
+    "description": "Engineering details",
     "status": "pending", 
-    "deadline": "2026-04-01T10:00:00.000Z" // Optional, ISO string
+    "category": "task",  // Default: 'task'
+    "problemLink": "",   // Optional: URL for 'dsa' revision
+    "deadline": "2026-04-01T10:00:00.000Z" // Optional
   }
   ```
 - **Response (201 Created)**: Returns the newly created Todo object.
@@ -100,10 +104,11 @@ All Todo endpoints require the `Authorization: Bearer <token>` header.
 ### Update a Todo
 **PUT** `/api/todos/:id`
 - **Params**: `id` - The `_id` of the Todo to update.
-- **Body** (JSON): Provide only the fields you wish to change. For example, to toggle status:
+- **Body** (JSON): Provide only the fields you wish to change.
   ```json
   {
-    "status": "completed"
+    "status": "completed",
+    "category": "dsa"
   }
   ```
 - **Response (200 OK)**: Returns the updated Todo object.
@@ -115,20 +120,20 @@ All Todo endpoints require the `Authorization: Bearer <token>` header.
 
 ---
 
-## 📝 3. Notes API
+## 📝 3. Blueprints API (Notes)
 
-All Notes endpoints require the `Authorization: Bearer <token>` header.
+The system has evolved from simple notes into a **Digital Notebook for high-fidelity blueprints**. All endpoints require the `Authorization: Bearer <token>` header.
 
-### Get All Notes
+### Get All Blueprints
 **GET** `/api/notes`
-- **Description**: Fetches all Markdown notes for the authenticated user, sorted by last updated.
+- **Description**: Fetches all architectural blueprints for the authenticated user.
 - **Response (200 OK)**
   ```json
   [
     {
       "_id": "xyz987",
-      "title": "Project Ideas",
-      "content": "# Idea 1\nThis is a markdown note...",
+      "title": "PROJECT BLUEPRINT",
+      "content": "# ARCHITECTURAL BENCHMARKS\n- [ ] Task 1\n```python\n# Run code benchmarks\n```",
       "userId": "60d5ec...",
       "createdAt": "...",
       "updatedAt": "..."
@@ -136,33 +141,33 @@ All Notes endpoints require the `Authorization: Bearer <token>` header.
   ]
   ```
 
-### Create a Note
+### Create a Blueprint
 **POST** `/api/notes`
 - **Body** (JSON):
   ```json
   {
-    "title": "New Note",
-    "content": "Start typing here..."
+    "title": "NEW BLUEPRINT",
+    "content": "Start architecting here..."
   }
   ```
 - **Response (201 Created)**: Returns the newly created Note object.
 
-### Update a Note
+### Update a Blueprint
 **PUT** `/api/notes/:id`
 - **Params**: `id` - The `_id` of the Note to update.
 - **Body** (JSON):
   ```json
   {
-    "title": "Updated Title",
-    "content": "Updated content here..."
+    "title": "UPDATED ARCHITECTURE",
+    "content": "Updated technical benchmarks here..."
   }
   ```
 - **Response (200 OK)**: Returns the updated Note object.
 
-### Delete a Note
+### Delete a Blueprint
 **DELETE** `/api/notes/:id`
 - **Params**: `id` - The `_id` of the Note to delete.
-- **Response (200 OK)**: `{ "message": "Note deleted successfully" }`
+- **Response (200 OK)**: `{ "message": "Blueprint deleted successfully" }`
 
 ---
 

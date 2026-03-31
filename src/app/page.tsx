@@ -84,13 +84,13 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="space-y-8"
+                className="space-y-6 sm:space-y-8"
               >
-                <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.8] text-foreground">
-                  SHIP FASTER. <br />
+                <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.9] sm:leading-[0.8] text-foreground">
+                  SHIP FASTER. <br className="hidden sm:block" />
                   <span className="text-primary italic font-serif">BUILD BETTER.</span>
                 </h1>
-                <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium uppercase tracking-tight opacity-80">
+                <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium uppercase tracking-tight opacity-80 px-4">
                   The high-fidelity workspace for creators to track DSA mastery, architect logic-heavy notes, and crush deliverables.
                 </p>
               </motion.div>
@@ -126,10 +126,10 @@ export default function LandingPage() {
         </section>
 
         {/* --- HOW IT WORKS SECTION --- */}
-        <ScrollSection id="how-it-works" className="py-32 px-6">
-          <div className="max-w-5xl mx-auto text-center mb-24">
-            <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight">Three Steps to Peak Flow</h2>
-            <p className="text-muted-foreground text-lg">We stripped away the noise so you can focus on what matters.</p>
+        <ScrollSection id="how-it-works" className="py-20 sm:py-32 px-6">
+          <div className="max-w-5xl mx-auto text-center mb-16 sm:mb-24">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 sm:mb-6 tracking-tight">Three Steps to Peak Flow</h2>
+            <p className="text-muted-foreground text-base sm:text-lg">We stripped away the noise so you can focus on what matters.</p>
           </div>
 
           <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-12 sm:gap-20 relative">
@@ -229,11 +229,11 @@ export default function LandingPage() {
       </main>
 
       {/* --- FOOTER --- */}
-      <footer className="py-20 border-t border-border bg-surface/50 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-start justify-between gap-16">
+      <footer className="py-16 sm:py-20 border-t border-border bg-surface/50 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-start justify-between gap-12 sm:gap-16">
           <div className="space-y-6 max-w-xs">
             <Logo />
-            <p className="text-muted-foreground text-sm leading-relaxed italic">
+            <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed italic opacity-70">
               Crafted with precision for the next generation of software architects. Forget nothing, build everything.
             </p>
           </div>
