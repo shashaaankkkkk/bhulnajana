@@ -20,8 +20,8 @@ export const noteSchema = z.object({
 
 export const solutionSchema = z.object({
   approach: z.enum(["brute", "better", "optimal"]),
-  code: z.string().min(1, "Code is required"),
-  explanation: z.string().min(1, "Explanation is required"),
+  code: z.string().optional().or(z.literal("")),
+  explanation: z.string().optional().or(z.literal("")),
   language: z.string().default("javascript"),
   timeComplexity: z.string().optional(),
   spaceComplexity: z.string().optional(),

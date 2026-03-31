@@ -22,6 +22,7 @@ interface DSANote {
 export default function DSADashboard() {
   const [notes, setNotes] = useState<DSANote[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState<"all" | "problem" | "theory">("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,28 +33,41 @@ export default function DSADashboard() {
 
   const fetchNotes = async () => {
     try {
-      const res = await fetch("/api/dsa");
+      setError(null);
+      const res = await fetch("/api/dsa", { cache: "no-store" });
+      if (!res.ok) throw new Error("Failed to fetch entries");
       const data = await res.json();
       setNotes(data);
+    } catch (err: unknown) {
+      setError("Unable to load entries. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleSave = async (data: Partial<DSANote>) => {
-    const res = await fetch("/api/dsa", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    if (res.ok) {
-      fetchNotes();
+    try {
+      const res = await fetch("/api/dsa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        fetchNotes();
+      } else {
+        const errorData = await res.json();
+        alert(errorData.message || "Failed to save entry");
+      }
+    } catch (err) {
+      alert("Error saving entry");
     }
   };
 
   const filteredNotes = notes.filter((note) => {
-    const matchesSearch = note.title.toLowerCase().includes(search.toLowerCase()) || 
-                         (note.category?.toLowerCase().includes(search.toLowerCase()));
+    const title = note.title || "";
+    const category = note.category || "";
+    const matchesSearch = title.toLowerCase().includes(search.toLowerCase()) || 
+                         category.toLowerCase().includes(search.toLowerCase());
     const matchesType = filterType === "all" || note.type === filterType;
     return matchesSearch && matchesType;
   });
@@ -112,6 +126,11 @@ export default function DSADashboard() {
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map(i => <div key={i} className="h-40 bg-surface border border-border rounded-2xl animate-pulse" />)}
+        </div>
+      ) : error ? (
+        <div className="p-8 text-center bg-red-50 dark:bg-red-950/20 rounded-3xl border border-red-100 dark:border-red-900/50">
+          <p className="text-red-600 dark:text-red-400 font-medium">{error}</p>
+          <Button variant="ghost" className="mt-4" onClick={fetchNotes}>Try again</Button>
         </div>
       ) : filteredNotes.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-border rounded-3xl bg-surface/30">

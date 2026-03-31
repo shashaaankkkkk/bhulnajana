@@ -6,8 +6,8 @@ import { Providers } from "@/components/Providers";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Premium Todo & Notes",
-  description: "A fast, responsive, and beautiful productivity app.",
+  title: "BhulnaJaana",
+  description: "Your premium, all-in-one workspace for Todos, Notes, and DSA problem tracking.",
 };
 
 export default function RootLayout({
@@ -17,6 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+      </head>
       <body className={`${inter.variable} font-sans antialiased text-foreground bg-background`}>
         <Providers>
           {children}

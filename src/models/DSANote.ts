@@ -27,8 +27,8 @@ export interface IDSANote extends Document {
 
 const solutionSchema = new mongoose.Schema({
   approach: { type: String, enum: ["brute", "better", "optimal"], required: true },
-  code: { type: String, required: true },
-  explanation: { type: String, required: true },
+  code: { type: String, required: false },
+  explanation: { type: String, required: false },
   language: { type: String, default: "javascript" },
   timeComplexity: { type: String },
   spaceComplexity: { type: String },

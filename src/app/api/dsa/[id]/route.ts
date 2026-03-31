@@ -4,6 +4,8 @@ import DSANote from "@/models/DSANote";
 import { getHybridUser } from "@/lib/session";
 import { dsaSchema } from "@/lib/validations";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: Request, context: { params: Promise<{ id: string }> }) {
   try {
     const user = await getHybridUser(req);

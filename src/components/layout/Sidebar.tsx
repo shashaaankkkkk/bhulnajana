@@ -6,6 +6,8 @@ import { CheckSquare, FileText, User, LogOut, Calendar, Code } from "lucide-reac
 import { cn } from "@/lib/utils";
 import { signOut } from "next-auth/react";
 
+import { Logo } from "@/components/ui/Logo";
+
 const navItems = [
   { label: "Todos", href: "/dashboard/todos", icon: CheckSquare },
   { label: "Notes", href: "/dashboard/notes", icon: FileText },
@@ -19,8 +21,8 @@ export function Sidebar() {
 
   return (
     <aside className="hidden md:flex w-64 flex-col border-r border-border bg-surface px-4 py-6">
-      <div className="mb-8 px-2 mx-auto md:mx-0">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">Productivity</h1>
+      <div className="mb-8 px-4 py-2">
+        <Logo />
       </div>
       
       <nav className="flex-1 space-y-1 block">
