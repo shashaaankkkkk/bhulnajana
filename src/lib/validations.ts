@@ -17,3 +17,25 @@ export const noteSchema = z.object({
   title: z.string().min(1, "Title is required"),
   content: z.string().min(1, "Content is required"),
 });
+
+export const solutionSchema = z.object({
+  approach: z.enum(["brute", "better", "optimal"]),
+  code: z.string().min(1, "Code is required"),
+  explanation: z.string().min(1, "Explanation is required"),
+  language: z.string().default("javascript"),
+  timeComplexity: z.string().optional(),
+  spaceComplexity: z.string().optional(),
+});
+
+export const dsaSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  type: z.enum(["problem", "theory"]),
+  problemLink: z.string().url().optional().or(z.literal("")),
+  difficulty: z.enum(["Easy", "Medium", "Hard"]).optional(),
+  status: z.enum(["Solved", "Attempted", "Revisit"]).optional(),
+  category: z.string().optional(),
+  problemStatement: z.string().optional(),
+  notes: z.string().optional(),
+  theoryContent: z.string().optional(),
+  solutions: z.array(solutionSchema).optional(),
+});

@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CheckSquare, FileText, User, Calendar } from "lucide-react";
+import { CheckSquare, FileText, User, Calendar, Code } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
 const navItems = [
   { label: "Todos", href: "/dashboard/todos", icon: CheckSquare },
   { label: "Notes", href: "/dashboard/notes", icon: FileText },
+  { label: "DSA", href: "/dashboard/dsa", icon: Code },
   { label: "Calendar", href: "/dashboard/calendar", icon: Calendar },
   { label: "Profile", href: "/dashboard/profile", icon: User },
 ];

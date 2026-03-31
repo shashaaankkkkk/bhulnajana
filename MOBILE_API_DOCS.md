@@ -253,3 +253,58 @@ Register the device for Firebase Cloud Messaging (FCM) or Apple Push Notificatio
     "message": "Device token saved successfully"
   }
   ```
+---
+
+## 💻 7. DSA API (Data Structures & Algorithms)
+
+All DSA endpoints require the `Authorization: Bearer <token>` header and are available at `/api/mobile/dsa`.
+
+### Get All DSA Entries
+**GET** `/api/mobile/dsa`
+- **Description**: Fetches all DSA problems and theory notes for the user.
+- **Response (200 OK)**:
+  ```json
+  [
+    {
+      "_id": "dsa123",
+      "title": "Two Sum",
+      "type": "problem",
+      "difficulty": "Easy",
+      "category": "Arrays",
+      "updatedAt": "..."
+    }
+  ]
+  ```
+
+### Create a DSA Entry
+**POST** `/api/mobile/dsa`
+- **Body** (JSON):
+  ```json
+  {
+    "title": "Two Sum",
+    "type": "problem",
+    "difficulty": "Easy",
+    "category": "Arrays",
+    "problemLink": "https://leetcode.com/problems/two-sum/",
+    "problemStatement": "Given an array of integers...",
+    "notes": "Think about HashMaps for O(n) time.",
+    "solutions": [
+      {
+        "approach": "optimal",
+        "language": "javascript",
+        "code": "...",
+        "explanation": "Using a Map to store indices.",
+        "timeComplexity": "O(n)",
+        "spaceComplexity": "O(n)"
+      }
+    ]
+  }
+  ```
+- **Response (201 Created)**: Returns the created DSA object.
+
+### Get/Update/Delete DSA Entry
+**GET / PUT / DELETE** `/api/mobile/dsa/:id`
+- **Params**: `id` - The `_id` of the entry.
+- **PUT Body**: Provide any fields to update (same structure as POST).
+- **Response**: 200 OK with the object or success message.
+
