@@ -5,6 +5,8 @@ export interface ITodo extends Document {
   title: string;
   description?: string;
   status: 'pending' | 'completed';
+  category: 'task' | 'dsa';
+  problemLink?: string;
   deadline?: Date;
   notified3h: boolean;
   notified10m: boolean;
@@ -18,6 +20,8 @@ const TodoSchema: Schema = new Schema(
     title: { type: String, required: true },
     description: { type: String },
     status: { type: String, enum: ['pending', 'completed'], default: 'pending' },
+    category: { type: String, enum: ['task', 'dsa'], default: 'task' },
+    problemLink: { type: String },
     deadline: { type: Date },
     notified3h: { type: Boolean, default: false },
     notified10m: { type: Boolean, default: false },

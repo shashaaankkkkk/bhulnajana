@@ -14,7 +14,8 @@ import {
   ShieldCheck,
   ChevronRight
 } from "lucide-react";
-import { DashboardShowcase } from "@/components/landing/MacbookMockup";
+import { BrowserMockup } from "@/components/landing/BrowserMockup";
+import { HeroDashboard } from "@/components/landing/HeroDashboard";
 import { Button } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Logo } from "@/components/ui/Logo";
@@ -38,25 +39,25 @@ export default function LandingPage() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-cyan-500/10 blur-[120px]" />
       </div>
 
-      <header className="px-6 h-20 flex items-center justify-between border-b border-border/40 backdrop-blur-xl sticky top-0 z-50">
+      <header className="px-6 h-24 flex items-center justify-between border-b border-border/40 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
           <Logo />
           
           <nav className="hidden lg:flex items-center gap-10">
-            <Link href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-all">Features</Link>
-            <Link href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-all">Workflow</Link>
-            <Link href="#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-all">Pricing</Link>
+            <Link href="#features" className="text-sm font-bold text-muted-foreground hover:text-foreground transition-all uppercase tracking-widest">Features</Link>
+            <Link href="#how-it-works" className="text-sm font-bold text-muted-foreground hover:text-foreground transition-all uppercase tracking-widest">Workflow</Link>
+            <Link href="#pricing" className="text-sm font-bold text-muted-foreground hover:text-foreground transition-all uppercase tracking-widest">Pricing</Link>
           </nav>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <ThemeToggle />
-            <div className="hidden sm:flex items-center gap-4 border-l border-border pl-4">
-              <Link href="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground px-4 py-2 hover:bg-surface-hover rounded-lg transition-colors">
-                Log in
+            <div className="hidden sm:flex items-center gap-6 border-l border-border pl-6">
+              <Link href="/login" className="text-sm font-bold text-muted-foreground hover:text-foreground hover:bg-surface-hover px-4 py-2 rounded-xl transition-all">
+                Login
               </Link>
               <Link href="/register">
-                <Button size="sm" className="shadow-lg shadow-primary/15">
-                  Get Started
+                <Button size="sm" className="shadow-lg shadow-primary/15 font-black uppercase tracking-widest text-[10px]">
+                  Join Now
                 </Button>
               </Link>
             </div>
@@ -66,57 +67,63 @@ export default function LandingPage() {
 
       <main className="flex-1">
         {/* --- HERO SECTION --- */}
-        <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-40 px-6 overflow-hidden">
-          <div className="max-w-6xl mx-auto text-center space-y-12">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/[0.08] border border-primary/20 text-primary text-[11px] font-bold uppercase tracking-[0.2em] mb-4 shadow-sm"
-            >
-              <Sparkles size={14} className="animate-pulse" />
-              Your New Developer Standard
-            </motion.div>
+        <section className="relative pt-24 pb-20 lg:pt-32 lg:pb-32 px-6 overflow-hidden">
+          <div className="max-w-7xl mx-auto text-center space-y-16">
+            <div className="space-y-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/[0.08] border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.3em] mb-4 shadow-sm"
+              >
+                <Sparkles size={14} className="animate-pulse" />
+                The Developer Engine
+              </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="space-y-6"
-            >
-              <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tight leading-[0.85] text-foreground">
-                Ship faster. <br />
-                <span className="text-primary italic font-serif">Learn better.</span>
-              </h1>
-              <p className="text-lg md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
-                The high-fidelity workspace for engineers to track DSA progress, architect complex notes, and crush deliverables.
-              </p>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6"
-            >
-              <Link href="/register" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full sm:w-auto h-16 px-12 text-lg font-bold group rounded-2xl shadow-xl shadow-primary/20">
-                  Build Your Workspace
-                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </Button>
-              </Link>
-              <Link href="/login" className="w-full sm:w-auto">
-                <Button variant="ghost" size="lg" className="w-full sm:w-auto h-16 px-12 text-lg border-border hover:bg-surface-hover rounded-2xl">
-                  <Terminal size={20} className="mr-3 opacity-60" />
-                  Try Demo
-                </Button>
-              </Link>
-            </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="space-y-8"
+              >
+                <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.8] text-foreground">
+                  SHIP FASTER. <br />
+                  <span className="text-primary italic font-serif">BUILD BETTER.</span>
+                </h1>
+                <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium uppercase tracking-tight opacity-80">
+                  The high-fidelity workspace for creators to track DSA mastery, architect logic-heavy notes, and crush deliverables.
+                </p>
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6"
+              >
+                <Link href="/register" className="w-full sm:w-auto">
+                  <Button size="lg" className="w-full sm:w-auto h-16 px-12 text-lg font-black group rounded-2xl shadow-2xl shadow-primary/20 uppercase tracking-widest">
+                    Get Started
+                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </Link>
+                <Link href="/login" className="w-full sm:w-auto">
+                  <Button variant="ghost" size="lg" className="w-full sm:w-auto h-16 px-12 text-lg border-border hover:bg-surface-hover rounded-2xl font-bold uppercase tracking-tight">
+                    <Terminal size={20} className="mr-3 opacity-60" />
+                    Open Demo
+                  </Button>
+                </Link>
+              </motion.div>
+            </div>
+
+            {/* --- HERO SHOWCASE (Browser Mockup) --- */}
+            <div className="pt-12 px-2 sm:px-4">
+               <BrowserMockup>
+                 <HeroDashboard />
+               </BrowserMockup>
+            </div>
           </div>
         </section>
-
-        {/* --- LIVE PREVIEW SHOWCASE (Macbook) --- */}
-        <DashboardShowcase />
 
         {/* --- HOW IT WORKS SECTION --- */}
         <ScrollSection id="how-it-works" className="py-32 px-6">

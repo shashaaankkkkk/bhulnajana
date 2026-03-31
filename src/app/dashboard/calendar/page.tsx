@@ -14,7 +14,7 @@ import {
   endOfWeek, 
   isSameDay
 } from "date-fns";
-import { ChevronLeft, ChevronRight, Plus, Check } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, Check, Calendar } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -24,6 +24,8 @@ type Todo = {
   _id: string;
   title: string;
   status: "pending" | "completed";
+  category: "task" | "dsa";
+  problemLink?: string;
   deadline?: string;
 };
 
@@ -35,6 +37,8 @@ export default function CalendarPage() {
   // Quick Add State
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [newTaskCategory, setNewTaskCategory] = useState<"task" | "dsa">("task");
+  const [newTaskLink, setNewTaskLink] = useState("");
   const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
@@ -65,6 +69,8 @@ export default function CalendarPage() {
         body: JSON.stringify({ 
           title: newTaskTitle, 
           status: "pending",
+          category: newTaskCategory,
+          problemLink: newTaskLink,
           deadline: selectedDate.toISOString() 
         }),
       });
@@ -73,6 +79,8 @@ export default function CalendarPage() {
         const newTodo = await res.json();
         setTodos([...todos, newTodo]);
         setNewTaskTitle("");
+        setNewTaskLink("");
+        setNewTaskCategory("task");
         setSelectedDate(null);
       }
     } finally {
@@ -111,8 +119,11 @@ export default function CalendarPage() {
     <div className="flex flex-col h-[calc(100vh-8rem)] xl:h-[calc(100vh-6rem)] -mt-2 bg-background">
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">Calendar</h1>
-          <p className="text-sm text-muted-foreground mt-1">Plan and manage your deadlines.</p>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-3">
+             Calendar
+             <span className="text-[10px] bg-cyan-500/10 text-cyan-500 px-2 py-0.5 rounded-full uppercase tracking-widest font-black border border-cyan-500/20">DSA Sync Active</span>
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">Plan and manage your engineering deadlines.</p>
         </div>
         <div className="flex items-center space-x-2">
           <Button variant="outline" size="sm" onClick={goToToday}>Today</Button>
@@ -182,8 +193,10 @@ export default function CalendarPage() {
                        className={cn(
                          "text-[10px] md:text-xs px-1 md:px-1.5 py-0.5 md:py-1 rounded truncate flex items-center transition-colors group/todo",
                          todo.status === "completed" 
-                           ? "bg-surface-hover text-muted-foreground line-through decoration-muted-foreground/50" 
-                           : "bg-primary/10 text-primary hover:bg-primary/20"
+                           ? "bg-surface-hover text-muted-foreground line-through decoration-muted-foreground/50 border-transparent" 
+                           : todo.category === "dsa"
+                             ? "bg-cyan-500/10 text-cyan-600 border border-cyan-500/20 hover:bg-cyan-500/20 dark:text-cyan-400"
+                             : "bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20"
                        )}
                      >
                         <div className="flex-shrink-0 w-2.5 h-2.5 border rounded-sm mr-1 flex items-center justify-center transition-colors border-current/30">
@@ -192,9 +205,6 @@ export default function CalendarPage() {
                         <span className="truncate">{todo.title}</span>
                      </div>
                   ))}
-                  {loading && isTodayDate && todos.length === 0 && (
-                    <div className="w-full h-4 animate-pulse bg-muted rounded mt-1" />
-                  )}
                 </div>
               </div>
             );
@@ -210,7 +220,11 @@ export default function CalendarPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm"
-              onClick={() => setSelectedDate(null)}
+              onClick={() => {
+                setSelectedDate(null);
+                setNewTaskCategory("task");
+                setNewTaskLink("");
+              }}
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -218,21 +232,63 @@ export default function CalendarPage() {
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[90%] max-w-md bg-surface border border-border rounded-xl shadow-2xl p-6"
             >
-              <h2 className="text-xl font-semibold mb-1 tracking-tight">Add Task</h2>
-              <p className="text-sm text-muted-foreground mb-6">Due on {format(selectedDate, "MMMM d, yyyy")}</p>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="h-10 w-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                  <Calendar size={20} />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold tracking-tight">Schedule Block</h2>
+                  <p className="text-sm text-muted-foreground italic">Due on {format(selectedDate, "MMMM d, yyyy")}</p>
+                </div>
+              </div>
               
-              <form onSubmit={createTodo} className="space-y-4">
-                <Input 
-                  autoFocus
-                  placeholder="What needs to be done?" 
-                  value={newTaskTitle}
-                  onChange={(e) => setNewTaskTitle(e.target.value)}
-                  className="bg-background"
-                />
-                <div className="flex justify-end space-x-3 pt-2">
-                  <Button type="button" variant="ghost" onClick={() => setSelectedDate(null)}>Cancel</Button>
-                  <Button type="submit" disabled={!newTaskTitle.trim() || isCreating}>
-                    {isCreating ? "Adding..." : "Add to Calendar"}
+              <form onSubmit={createTodo} className="space-y-5">
+                <div className="flex p-1 bg-muted rounded-lg gap-1">
+                   <button
+                     type="button"
+                     onClick={() => setNewTaskCategory("task")}
+                     className={cn("flex-1 py-1.5 text-xs font-bold rounded-md transition-all", newTaskCategory === "task" ? "bg-surface text-primary shadow-sm" : "text-muted-foreground hover:text-foreground")}
+                   >
+                     General Task
+                   </button>
+                   <button
+                     type="button"
+                     onClick={() => setNewTaskCategory("dsa")}
+                     className={cn("flex-1 py-1.5 text-xs font-bold rounded-md transition-all", newTaskCategory === "dsa" ? "bg-cyan-500 text-white shadow-sm" : "text-muted-foreground hover:text-foreground")}
+                   >
+                     DSA Revision
+                   </button>
+                </div>
+
+                <div className="space-y-4">
+                  <Input 
+                    autoFocus
+                    placeholder={newTaskCategory === "dsa" ? "e.g. Solve Binary Tree Traversal" : "What needs to be done?"}
+                    value={newTaskTitle}
+                    onChange={(e) => setNewTaskTitle(e.target.value)}
+                    className="bg-background font-medium"
+                  />
+                  
+                  {newTaskCategory === "dsa" && (
+                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }}>
+                      <Input 
+                        placeholder="LeetCode / Problem Link (optional)" 
+                        value={newTaskLink}
+                        onChange={(e) => setNewTaskLink(e.target.value)}
+                        className="bg-background text-xs"
+                      />
+                    </motion.div>
+                  )}
+                </div>
+
+                <div className="flex justify-end space-x-3 pt-4">
+                  <Button type="button" variant="ghost" onClick={() => {
+                    setSelectedDate(null);
+                    setNewTaskCategory("task");
+                    setNewTaskLink("");
+                  }}>Cancel</Button>
+                  <Button type="submit" disabled={!newTaskTitle.trim() || isCreating} className={cn(newTaskCategory === "dsa" && "bg-cyan-500 hover:bg-cyan-600 text-white")}>
+                    {isCreating ? "Scheduling..." : newTaskCategory === "dsa" ? "Schedule Session" : "Add to Calendar"}
                   </Button>
                 </div>
               </form>

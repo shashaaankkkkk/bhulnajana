@@ -10,6 +10,8 @@ export const todoSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
   status: z.enum(["pending", "completed"]).optional(),
+  category: z.enum(["task", "dsa"]).optional().default("task"),
+  problemLink: z.string().url().optional().or(z.literal("")),
   deadline: z.string().optional().nullable(),
 });
 

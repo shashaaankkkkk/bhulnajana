@@ -11,18 +11,16 @@ interface LogoProps {
 
 export function Logo({ className, showText = true }: LogoProps) {
   return (
-    <Link href="/" className={cn("flex items-center gap-3 group", className)}>
-      <div className="relative h-9 w-9 bg-primary rounded-xl flex items-center justify-center font-black text-primary-foreground text-sm shadow-xl shadow-primary/20 group-hover:rotate-12 transition-all duration-300">
-        <Image
-          src="/flaticon.svg"
-          alt="BhulnaJaana Logo"
-          width={20}
-          height={20}
-          className="invert dark:invert-0"
-        />
-      </div>
+    <Link href="/" className={cn("flex items-center gap-4 group", className)}>
+      <Image
+        src="/flaticon.svg"
+        alt="BhulnaJaana Logo"
+        width={36}
+        height={36}
+        className="transition-transform group-hover:scale-110 duration-500"
+      />
       {showText && (
-        <span className="font-bold text-xl tracking-tighter text-foreground">
+        <span className="font-black text-2xl tracking-tighter text-foreground uppercase border-l-2 border-border pl-4">
           BhulnaJaana
         </span>
       )}
