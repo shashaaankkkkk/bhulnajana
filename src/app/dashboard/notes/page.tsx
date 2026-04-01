@@ -276,17 +276,20 @@ export default function NotesPage() {
   };
 
   const exportPDF = () => {
-    window.print();
+    setMode("visual");
+    // Ensure we are in visual mode before printing to avoid blank textarea
+    setTimeout(() => {
+      window.print();
+    }, 500);
   };
 
   const handleNoteLinkClick = (title: string) => {
     // Check if it's a direct title or type:title
-    const cleanTitle = title.includes(':') ? title.split(':')[1] : title;
+    const cleanTitle = title.includes(':') ? title.split(':').slice(1).join(':').trim() : title.trim();
     const target = notes.find(n => n.title.toLowerCase() === cleanTitle.toLowerCase());
     if (target) {
        openNote(target);
     } else {
-       // If not found, maybe create it or show a toast?
        console.log("Note not found:", cleanTitle);
     }
   };
@@ -296,7 +299,7 @@ export default function NotesPage() {
     return parts.map((part, i) => {
       if (part.startsWith('[[') && part.endsWith(']]')) {
         const linkText = part.slice(2, -2);
-        const [type, value] = linkText.includes(':') ? linkText.split(':') : ['note', linkText];
+        const [type, value] = linkText.includes(':') ? [linkText.split(':')[0], linkText.split(':').slice(1).join(':')] : ['note', linkText];
         let icon = <FileText size={14} className="opacity-60" />;
         let color = "text-primary border-primary/20 bg-primary/5 hover:bg-primary/10";
         if (type === 'task') { icon = <CheckSquare size={14} />; color = "text-orange-500 border-orange-500/20 bg-orange-500/5 hover:bg-orange-500/10"; }
@@ -306,7 +309,7 @@ export default function NotesPage() {
           <button 
             key={i} 
             onClick={() => handleNoteLinkClick(linkText)}
-            className={cn("inline-flex items-center gap-1.5 px-2 py-0.5 border rounded-md font-semibold transition-all text-[10px] uppercase tracking-wider", color)}
+            className={cn("inline-flex items-center gap-1.5 px-2 py-0.5 border rounded-md font-semibold transition-all text-[10px] uppercase tracking-wider cursor-pointer active:scale-95", color)}
           >
             {icon} {value}
           </button>
@@ -326,7 +329,7 @@ export default function NotesPage() {
       if (matches) {
         matches.forEach(match => {
           const content = match.slice(2, -2);
-          const title = content.includes(':') ? content.split(':')[1] : content;
+          const title = content.includes(':') ? content.split(':').slice(1).join(':') : content;
           const target = notes.find(n => n.title.toLowerCase() === title.toLowerCase());
           if (target) links.push({ source: note._id, target: target._id });
         });
@@ -531,7 +534,15 @@ export default function NotesPage() {
                                    code: ({...props}) => <code className="bg-primary/5 px-2 py-0.5 rounded-lg font-mono text-sm text-primary font-bold border border-primary/10" {...props} />,
                                    pre: ({...props}) => <pre className="p-10 rounded-3xl border border-border/50 bg-[#0A0A0C] shadow-2xl my-12 overflow-x-auto ring-1 ring-white/5 print:bg-white print:text-black print:border" {...props} />,
                                    blockquote: ({...props}) => <blockquote className="border-l-4 border-primary/40 bg-primary/[0.02] p-10 rounded-2xl my-12 italic text-muted-foreground/80 font-medium leading-relaxed shadow-sm print:bg-transparent print:border-l-4 print:border-gray-200" {...props} />,
-                                   img: ({...props}) => <img className="rounded-3xl border-8 border-background shadow-2xl my-16 hover:scale-[1.02] transition-transform cursor-zoom-in print:shadow-none print:border" {...props} />,
+                                   img: ({...props}) => (
+                                      <span className="block my-16 text-center group/img">
+                                         <img 
+                                           className="mx-auto block max-w-full rounded-2xl shadow-xl border border-border/50 transition-all group-hover/img:scale-[1.01] group-hover/img:shadow-2xl print:shadow-none print:border-none" 
+                                           {...props} 
+                                         />
+                                         {props.alt && <span className="block mt-4 text-[10px] font-black text-muted-foreground uppercase tracking-widest opacity-40 px-10 leading-relaxed">{props.alt}</span>}
+                                      </span>
+                                   ),
                                    table: ({...props}) => <div className="overflow-x-auto my-12 rounded-2xl border border-border/50 shadow-sm"><table className="w-full border-collapse" {...props} /></div>,
                                    th: ({...props}) => <th className="p-5 bg-muted/40 font-black text-[11px] uppercase tracking-[0.2em] text-left border-b border-border/50" {...props} />,
                                    td: ({...props}) => <td className="p-5 border-b border-border/10 text-sm font-medium" {...props} />,
@@ -610,11 +621,34 @@ export default function NotesPage() {
           50% { transform: translateY(-4px); }
         }
         @media print {
-          body * { visibility: hidden; }
-          .fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[100\] * { visibility: visible; }
-          .fixed.inset-0.z-\[100\] { position: absolute !important; left: 0; top: 0; width: 100%; display: block; height: auto; overflow: visible; background: white !important; }
-          .rounded-xl { border-radius: 0 !important; }
-          .shadow-sm, .shadow-md, .shadow-xl, .shadow-2xl { shadow: none !important; }
+          /* SURGICAL PRINT STRATEGY */
+          body > *:not(.print-container) { display: none !important; }
+          .fixed.inset-0.z-\[100\] { 
+            position: absolute !important; 
+            left: 0 !important; 
+            top: 0 !important; 
+            width: 100% !important; 
+            display: block !important; 
+            overflow: visible !important; 
+            background: white !important;
+            height: auto !important;
+            z-index: auto !important;
+          }
+          nav, header, button, footer, .print-hide, .framer-motion-overlay { 
+            display: none !important; 
+            visibility: hidden !important;
+          }
+          .print-area {
+            margin: 0 !important;
+            padding: 2cm !important;
+            box-shadow: none !important;
+            border: none !important;
+            max-width: none !important;
+            width: 100% !important;
+            min-height: 0 !important;
+          }
+          /* Re-enable display for critical content */
+          body * { visibility: visible; }
         }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
